@@ -128,7 +128,7 @@
                     </v-row>
                     <h2 class="montserrat">Все переговорные</h2>
                     <v-row>
-                      <v-col>
+                      <v-col class="ma-4">
                         <v-card elevation="5">
                           <v-card-text>
                             <v-row>
@@ -140,7 +140,7 @@
                                   label="Этаж"
                                 />
                               </v-col>
-                              <v-col cols="12" sm="4">
+                              <v-col cols="12" sm="6">
                                 <v-text-field label="Поиск" dense outlined
                                   >Поиск</v-text-field
                                 >
@@ -151,13 +151,13 @@
                                     'ВКС',
                                     'Микрофоны',
                                     'WI-FI',
-                                    'LED эран',
+                                    'LED экран',
                                   ]"
                                   attach
                                   chips
                                   dense
                                   outlined
-                                  label="Оборудование"
+                                  
                                   multiple
                                 ></v-select>
                               </v-col>

@@ -48,9 +48,9 @@
           </v-tab-item>
           <v-tab-item>
             <v-row no-gutters class="messager" style="overflow-y: scroll">
-              <v-col align-self="end">
+              <v-col align-self="end" >
                 <v-row v-if="EVENT_BY_ID">
-                  <v-col>
+                  <v-col align="center">
                     <div v-if="EVENT_BY_ID.messages.length == 0">
                       <h3>Пока нет сообщений</h3>
                     </div>
@@ -131,7 +131,7 @@ export default {
     }
     setInterval(() => {
       this.$store.dispatch("GET_EVENTS");
-    }, 1500);
+    }, 1000);
   },
   methods: {
     myMessage(uid) {

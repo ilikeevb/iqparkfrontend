@@ -147,7 +147,6 @@
               ></div>
             </template>
           </v-calendar>
-          {{ OUTLOOK_CALENDAR }}
           <v-menu
             v-if="selectedEvent.name == '+ Забронировать'"
             v-model="selectedOpen"
@@ -227,11 +226,12 @@
                       outlined
                     ></v-select>
                     <v-checkbox :label="'Пригласить сотрудников'"></v-checkbox>
-                    <v-list v-if="USER.apps.microsoft.auth">
+                    <v-list v-if="USER.apps.microsoft.auth && !Array.isArray(OUTLOOK_CALENDAR)">
                       <v-list-group
                         v-model="active"
                         prepend-icon="mdi-microsoft"
                         no-action
+                        v-if="'data' in OUTLOOK_CALENDAR"
                       >
                         <template v-slot:activator>
                           <v-list-item-content>
@@ -241,8 +241,8 @@
                           </v-list-item-content>
                         </template>
 
-                        <v-list-item>
-                          <v-list-item-content>
+                        <v-list-item v-if="'value' in OUTLOOK_CALENDAR.data">
+                          <v-list-item-content v-if="OUTLOOK_CALENDAR.data.value">
                             <v-select
                               v-model="outlookCalendarId"
                               :items="OUTLOOK_CALENDAR.data.value"
@@ -571,7 +571,8 @@ export default {
       const days = (max.getTime() - min.getTime()) / 86400000;
       var date = new Date();
       let n = date.getDay();
-      if (date.getDate() > start.day) {
+      if(n == 0) { n = 7 }
+      if (Number(date.getDate()) > Number(start.day)) {
         if (n != 0) {
           n = n - 1;
         }
@@ -579,6 +580,7 @@ export default {
         n = 0;
       }
       if (this.USER) {
+        
         for (let i = n; i < days; i++) {
           let date = new Date();
           date.setDate(min.getDate() + i);
@@ -745,8 +747,8 @@ export default {
     },
 
     saveEvents() {
-      //let roomId = this.$route.params.id;
-      //let roomEvents = this.ROOM_BY_ID.events;
+      let roomId = this.$route.params.id;
+      let roomEvents = this.ROOM_BY_ID.events;
       let token = this.USER.apps.microsoft.token;
       if (this.outlookCalendarId) {
         console.log(this.outlookCalendarId);
@@ -758,7 +760,7 @@ export default {
         });
       }
 
-      /*
+      
       this.$store.dispatch("SET_ROOM_EVENTS", {
         roomId: roomId,
         events: roomEvents,
@@ -772,7 +774,7 @@ export default {
       });
 
       this.$store.dispatch("CREATE_EVENT", this.eventTemp);
-      */
+      
     },
   },
 };

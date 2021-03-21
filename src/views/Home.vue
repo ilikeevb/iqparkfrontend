@@ -1,8 +1,8 @@
 <template>
   <v-container>
-    <v-row>
+    <v-row style="height: 100vh" justify="center" align="center">
       <v-col align="center">
-        <v-card max-width="400">
+        <v-card max-width="400" elevation="10">
           <v-card-title class="justify-center">
             
           </v-card-title>
