@@ -1,4 +1,5 @@
 import firebase from "firebase";
+import axios from 'axios';
 
 const state = {
     firebaseEvents: null,
@@ -63,6 +64,11 @@ const actions = {
         batch.update(sf, { "messages": payload.messages });
         batch.commit();
     },
+    POST_OUTLOOK_EVENT: async (context, payload) => {
+        axios.post("http://localhost:3000/outlook/create/",
+            payload,
+        ).then((response) => console.log('vue: ', response));
+    }
 };
 
 export default {

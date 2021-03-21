@@ -147,6 +147,7 @@
               ></div>
             </template>
           </v-calendar>
+          {{ OUTLOOK_CALENDAR }}
           <v-menu
             v-if="selectedEvent.name == '+ Забронировать'"
             v-model="selectedOpen"
@@ -243,7 +244,10 @@
                         <v-list-item>
                           <v-list-item-content>
                             <v-select
-                              :items="['Мой календарь', 'Работа']"
+                              v-model="outlookCalendarId"
+                              :items="OUTLOOK_CALENDAR.data.value"
+                              :item-text="'name'"
+                              :item-value="'id'"
                               label="Календарь"
                               outlined
                             ></v-select>
@@ -281,6 +285,8 @@ export default {
   name: "Calendar",
   data() {
     return {
+      outlookEvent: {},
+      outlookCalendarId: null,
       active: false,
       color: "green",
       colors: [
@@ -383,6 +389,7 @@ export default {
   },
   computed: {
     ...mapGetters(["USER"]),
+    ...mapGetters(["OUTLOOK_CALENDAR"]),
     ROOM_BY_ID() {
       return this.$store.getters.ROOM_BY_ID(this.$route.params.id);
     },
@@ -620,6 +627,9 @@ export default {
     addEvent(date) {
       let start = new Date(date);
       let end = new Date(date);
+      let tempstart = start.toISOString().split(":");
+      let endstart = end.toISOString().split(":");
+
       start.setHours(this.hourEventStart);
       start.setMinutes(this.minuteEventStart);
       end.setHours(this.hourEventEnd);
@@ -656,6 +666,18 @@ export default {
         ],
         messages: [],
       });
+
+      this.outlookEvent = {
+        Subject: this.nameEvent,
+        Start: {
+          DateTime: tempstart[0] + ":" + tempstart[1] + ":00",
+          TimeZone: "Pacific Standard Time",
+        },
+        End: {
+          DateTime: endstart[0] + ":" + endstart[1] + ":00",
+          TimeZone: "Pacific Standard Time",
+        },
+      };
 
       this.USER.events.unshift({
         eventId: eventId,
@@ -723,9 +745,20 @@ export default {
     },
 
     saveEvents() {
-      let roomId = this.$route.params.id;
-      let roomEvents = this.ROOM_BY_ID.events;
+      //let roomId = this.$route.params.id;
+      //let roomEvents = this.ROOM_BY_ID.events;
+      let token = this.USER.apps.microsoft.token;
+      if (this.outlookCalendarId) {
+        console.log(this.outlookCalendarId);
+        console.log(this.outlookEvent);
+        this.$store.dispatch("POST_OUTLOOK_EVENT", {
+          token: token,
+          calendarId: this.outlookCalendarId,
+          event: this.outlookEvent,
+        });
+      }
 
+      /*
       this.$store.dispatch("SET_ROOM_EVENTS", {
         roomId: roomId,
         events: roomEvents,
@@ -739,6 +772,7 @@ export default {
       });
 
       this.$store.dispatch("CREATE_EVENT", this.eventTemp);
+      */
     },
   },
 };

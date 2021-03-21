@@ -11,7 +11,7 @@
           </v-tabs>
           <v-tabs-items v-model="tab">
             <v-tab-item>
-              <v-row>
+              <v-row v-if="EVENTS">
                 <v-col v-if="EVENTS.length > 0">
                   <v-card
                     class="ma-4"
@@ -53,7 +53,6 @@
                   <h3>Пока нет запланированных переговоров</h3>
                 </v-col>
               </v-row>
-              {{ EVENTS[0] }}
             </v-tab-item>
             <v-tab-item>
               <v-row>

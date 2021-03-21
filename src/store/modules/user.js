@@ -149,6 +149,7 @@ const actions = {
                     position: '',
                     verify: false,
                     type: 'user',
+                    favorites: [],
                     events: [],
                     apps: {
                         google: {
@@ -180,6 +181,7 @@ const actions = {
                 name: '',
                 company: '',
                 position: '',
+                favorites: [],
                 verify: false,
                 type: 'user',
                 events: [],

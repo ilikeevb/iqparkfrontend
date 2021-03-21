@@ -44,7 +44,7 @@
           </v-tabs>
           <v-tabs-items v-model="tab">
             <v-tab-item>
-              <v-row>
+              <v-row v-if="USER">
                 <v-col v-if="USER.events.length > 0" align="center">
                   <v-card
                     class="ma-4"
